@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MEET MATRIX — MATRIX BOT</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg-1: #060609;
+      --bg-2: #0b0b0d;
+      --muted: #9aa0a6;
+      --purple: #7b2bff;
+      --cyan: #00e0ff;
+      --accent-grad: linear-gradient(90deg, #7b2bff, #00e0ff);
+      --glass: rgba(255,255,255,0.03);
+      --card-height: 520px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      min-height:100%;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:
+        radial-gradient(800px 260px at 10% 22%, rgba(123,43,255,0.05), transparent 6%),
+        radial-gradient(700px 220px at 88% 78%, rgba(0,224,255,0.03), transparent 6%),
+        linear-gradient(180deg,var(--bg-1) 0%, var(--bg-2) 100%);
+      color:#e6eef8;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    body::after{
+      content:"";
+      position:fixed;
+      inset:0;
+      background-image: radial-gradient(rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 6px 6px;
+      opacity:0.5;
+      pointer-events:none;
+      mix-blend-mode:overlay;
+    }
+
+    .container{ max-width:1200px; margin:0 auto; padding:22px; }
+
+    /* NAVBAR */
+    nav.topbar{
+      display:flex;align-items:center;justify-content:space-between;
+      height:72px;
+    }
+    .brand{display:flex;align-items:center;gap:12px;color:#fff;}
+    .brand .title{display:flex;flex-direction:column;line-height:1;}
+    .brand .title .big{font-weight:800;font-size:14px;letter-spacing:0.02em}
+    .brand .title .small{font-size:12px;color:var(--muted);margin-top:2px}
+
+    .desktop-nav{
+      display:flex;
+      gap:18px;
+      align-items:center;
+      color:#c9d4df;
+      font-weight:600;
+    }
+    .desktop-nav a{
+      text-decoration:none;
+      padding:8px 12px;
+      border-radius:8px;
+      transition:all .15s ease;
+      color:inherit;
+    }
+    .desktop-nav a:hover{
+      transform:translateY(-3px);
+      box-shadow: 0 8px 26px rgba(0,0,0,0.6);
+    }
+
+    /* hamburger */
+    .hamburger{
+      display:none;
+      font-size:28px;
+      background:none;
+      border:none;
+      color:white;
+      cursor:pointer;
+    }
+
+    /* mobile menu overlay */
+    .mobile-menu{
+      position:fixed;top:0;right:-100%;width:80%;height:100%;
+      background:var(--bg-2);
+      color:white;
+      transition:right 0.3s ease;
+      z-index:1000;
+      padding:24px;
+      overflow-y:auto;
+    }
+    .mobile-menu.active{ right:0; }
+    .mobile-menu .close-btn{
+      background:none;border:none;color:white;font-size:24px;cursor:pointer;float:right;
+    }
+    .mobile-menu h3{
+      margin:22px 0 8px;font-size:14px;color:var(--cyan);text-transform:uppercase;
+    }
+    .mobile-menu a{
+      display:block;padding:8px 0;color:#e6eef8;text-decoration:none;font-weight:600;
+    }
+    .mobile-menu a:hover{ color:var(--purple); }
+
+    /* hero */
+    .hero{
+      display:grid;
+      grid-template-columns: 1fr 520px;
+      gap:44px;
+      align-items:center;
+      min-height: calc(100vh - 160px);
+      margin-top:18px;
+    }
+    .hero-left{ padding-right:12px; }
+    .meet{
+      font-family:"Orbitron", monospace;
+      font-weight:900;
+      font-size:56px;
+      line-height:0.9;
+      letter-spacing:0.02em;
+      background:linear-gradient(90deg,#4a16ff 0%, #00e0ff 45%, #8ad0ff 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      margin-bottom:8px;
+    }
+    .subtag{ font-family:"Orbitron", monospace; color:var(--cyan); font-weight:700; letter-spacing:0.09em; margin-bottom:18px; font-size:15px; }
+    .desc{ color:var(--muted); max-width:650px; font-size:15px; line-height:1.6; margin-bottom:28px; }
+
+    .cta{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:12px; }
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:12px;
+      font-weight:800;text-decoration:none;cursor:pointer;border:1px solid rgba(255,255,255,0.04);
+      transition: all .16s ease;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+    }
+    .btn-invite{
+      background: linear-gradient(90deg,#8b3bff,#00e0ff);
+      color:white;
+    }
+    .btn-invite:hover{ transform: translateY(-4px) scale(1.01) }
+    .btn-ghost{ color:#dbeafe;background:rgba(255,255,255,0.02); }
+    .btn-ghost:hover{ transform: translateY(-3px) }
+
+    .pills{ margin-top:18px; display:flex; gap:12px; flex-wrap:wrap }
+    .pill{ padding:8px 12px;border-radius:999px;background:linear-gradient(90deg,rgba(123,43,255,0.06),rgba(0,224,255,0.03));color:var(--cyan);font-weight:800;font-size:13px; }
+
+    .card{ width:100%;max-width:520px;height:var(--card-height);border-radius:14px;position:relative;display:flex;align-items:center;justify-content:center;padding:18px;margin-left:auto; }
+    .card-inner{position:relative;z-index:2;width:100%;height:100%;border-radius:10px;background:rgba(255,255,255,0.012);border:1px solid rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:center;padding:18px;}
+    .logo-frame{ width:92%;height:92%;border-radius:10px;background:linear-gradient(180deg,#061125, #071a2a);display:flex;align-items:center;justify-content:center; }
+    .logo-frame img{ max-width:86%;max-height:86%;object-fit:contain;animation: neonPulse 5s ease-in-out infinite; }
+
+    section.placeholder{ margin-top:40px;padding:36px;border-radius:12px;background:rgba(255,255,255,0.01);border:1px solid rgba(255,255,255,0.02);color:var(--muted); }
+
+    footer{ margin:56px auto 28px; color:#788394;text-align:center;font-size:13px; }
+
+    /* responsive */
+    @media (max-width:1000px){
+      .hero{ grid-template-columns:1fr; gap:28px; }
+      .card{ max-width:720px; height:440px; margin:0 auto; order:2 }
+      .meet{ font-size:48px }
+    }
+    @media (max-width:560px){
+      .desktop-nav{ display:none; }
+      .hamburger{ display:block; }
+      .meet{ font-size:36px }
+      .card{ height:360px }
+    }
+
+    @keyframes neonPulse {
+      0% { filter: drop-shadow(0 0 10px rgba(123,43,255,0.08)); }
+      50% { filter: drop-shadow(0 0 28px rgba(0,224,255,0.08)); }
+      100% { filter: drop-shadow(0 0 10px rgba(123,43,255,0.08)); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- NAV -->
+    <nav class="topbar">
+      <div class="brand">
+        <div class="title">
+          <div class="big">MATRIX BOT</div>
+          <div class="small">Your Ultimate Discord Bot</div>
+        </div>
+      </div>
+
+      <div class="desktop-nav">
+        <a href="index.html">Home</a>
+        <a href="Privacy.html">Privacy</a>
+        <a href="commands.html">Commands</a>
+        <a href="about.html">About</a>
+        <a href="developer.html">Developer</a>
+        <a href="discord.html">Discord</a>
+        <a href="premium.html">Premium</a>
+      </div>
+
+      <button class="hamburger">☰</button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <button class="close-btn">✕</button>
+      <h3>Matrix LINKS</h3>
+      <a href="index.html">Home</a>
+      <a href="Privacy.html">Privacy</a>
+      <a href="commands.html">Commands</a>
+      <a href="about.html">About</a>
+      <a href="developer.html">Developer</a>
+      <a href="discord.html">Discord</a>
+      <a href="premium.html">Premium</a>
+      
+      <h3>RESOURCES</h3>
+      <a href="#">Documentation</a>
+      <a href="#">FAQ</a>
+      <a href="#">Status</a>
+      <a href="https://discord.gg/FZGTR4g5TY">Support</a>
+
+      <h3>FOLLOW US</h3>
+      <a href"https://discord.gg/FZGTR4g5TY">Discord</a>
+    </div>
+
+    <!-- HERO -->
+    <main class="hero" id="home">
+      <div class="hero-left">
+        <div class="meet">MEET MATRIX</div>
+        <div class="subtag">YOUR ULTIMATE DISCORD BOT</div>
+        <p class="desc">Enhance your Discord server with powerful moderation tools, tournament & event management, automations, and community features — optimized for clans, streamers, and competitive teams.</p>
+        <div class="cta">
+          <a class="btn btn-invite" href="https://discord.com/oauth2/authorize?client_id=1408469170382831616&permissions=8&integration_type=0&scope=bot" target="_blank">Invite MATRIX</a>
+          <a class="btn btn-ghost" href="https://discord.gg/jk9n94azpA" target="_blank">Support Server</a>
+        </div>
+        <div class="pills">
+          <div class="pill">Moderation</div>
+          <div class="pill">Auto Roles</div>
+          <div class="pill">Tournaments</div>
+          <div class="pill">Music</div>
+          <div class="pill">Utilities</div>
+        </div>
+      </div>
+      <aside class="card">
+        <div class="card-inner">
+          <div class="logo-frame">
+            <img src="https://i.postimg.cc/PqPx0YxW/matrix-bot-logo.gif" alt="MATRIX BOT logo">
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <section id="features" class="placeholder">
+      <h3 style="color:#e8f6ff;margin-bottom:12px;font-weight:800">Features</h3>
+      <p>Complete feature list: moderation, automod, tournament tools, role management, music, economy, and more.</p>
+    </section>
+
+    <section id="commands" class="placeholder">
+      <h3 style="color:#e8f6ff;margin-bottom:12px;font-weight:800">Commands</h3>
+      <p>Common commands, slash & prefix support, and examples.</p>
+    </section>
+
+    <section id="about" class="placeholder">
+      <h3 style="color:#e8f6ff;margin-bottom:12px;font-weight:800">About</h3>
+      <p>MATRIX BOT is built for communities that need reliable moderation, tournament handling, and advanced automations.</p>
+    </section>
+
+    <footer>
+      © <strong>MATRIX BOT</strong> • Made for communities • <a href="#" style="color:var(--cyan);text-decoration:none">Contact</a>
+    </footer>
+  </div>
+
+  <script>
+    // Smooth scroll for nav links
+    document.querySelectorAll('.desktop-nav a').forEach(a=>{
+      a.addEventListener('click', e=>{
+        const href = a.getAttribute('href');
+        if(href && href.startsWith('#')){
+          e.preventDefault();
+          const el = document.querySelector(href);
+          if(el) el.scrollIntoView({behavior:'smooth'});
+        }
+      });
+    });
+
+    // mobile menu toggle
+    const hamburger = document.querySelector('.hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const closeBtn = mobileMenu.querySelector('.close-btn');
+
+    hamburger.addEventListener('click', ()=> mobileMenu.classList.add('active'));
+    closeBtn.addEventListener('click', ()=> mobileMenu.classList.remove('active'));
+  </script>
+</body>
+</html>
